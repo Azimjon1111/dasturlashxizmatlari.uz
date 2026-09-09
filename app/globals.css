@@ -1,0 +1,335 @@
+@import "tailwindcss";
+
+/* =========================================================
+   Dizayn tizimi — taqdimot PDF'idan olingan
+   Qora fon + neon ko'k/binafsha yorug'lik + og'ir siqilgan
+   bosh harfli sarlavhalar (Anton) + yengil grotesk matn (Inter)
+   ========================================================= */
+
+@theme {
+  /* --- Fon qatlamlari --- */
+  --color-void: #000000;
+  --color-abyss: #05070c;
+  --color-surface: #0a0e17;
+  --color-edge: #171d2b;
+
+  /* --- Neon ko'k (PDF'dan namuna: #019cf8 / #006cdb / #3da6fb) --- */
+  --color-neon-50: #e6f5ff;
+  --color-neon-100: #c0e7ff;
+  --color-neon-200: #8ed3ff;
+  --color-neon-300: #3da6fb;
+  --color-neon-400: #1a9df9;
+  --color-neon-500: #019cf8;
+  --color-neon-600: #0080e0;
+  --color-neon-700: #006cdb;
+  --color-neon-800: #0b4fa8;
+  --color-neon-900: #083b98;
+
+  /* --- Binafsha / magenta urg'u (PDF: #ae87fc) --- */
+  --color-violet-300: #cbb0fd;
+  --color-violet-400: #ae87fc;
+  --color-violet-500: #8b5cf6;
+  --color-magenta-400: #ff2bd6;
+  --color-magenta-500: #e011b8;
+
+  /* --- Matn --- */
+  --color-mist: #fdfdfd;
+  --color-muted: #8a94a6;
+  --color-faint: #5b6478;
+
+  /* --- Shriftlar --- */
+  --font-display: var(--font-anton), "Arial Narrow", system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--color-edge);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-void);
+  color: var(--color-mist);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-neon-500);
+  color: #000;
+}
+
+/* Klaviatura fokusi — neon halqa */
+:focus-visible {
+  outline: 2px solid var(--color-neon-500);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------------- Tipografika ---------------- */
+
+/* PDF'dagi bosh sarlavha: siqilgan, og'ir, bosh harfli, neon nurli */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  line-height: 0.88;
+}
+
+.h-hero {
+  font-size: clamp(2.75rem, 1rem + 8.6vw, 8.5rem);
+}
+
+.h-section {
+  font-size: clamp(2rem, 1rem + 4.4vw, 4.25rem);
+}
+
+.h-card {
+  font-size: clamp(1.25rem, 0.95rem + 1.2vw, 1.75rem);
+}
+
+/* PDF'dagi keng harf oralig'li kichik yorliqlar */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-neon-300);
+}
+
+.lede {
+  color: var(--color-muted);
+  line-height: 1.75;
+}
+
+/* ---------------- Neon nur effektlari ---------------- */
+
+/* Sarlavhalardagi oq neon porlash — PDF'ning asosiy belgisi */
+/* Porlash ataylab yumshoq: katta sarlavhalarda nur qatlamlari
+   bir-birining ustiga tushib, harflarni "yonib ketgan" holga
+   keltiradi va matnni o'qishni qiyinlashtiradi. */
+.neon {
+  color: #fff;
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.3),
+    0 0 10px rgba(1, 156, 248, 0.34),
+    0 0 26px rgba(1, 156, 248, 0.2),
+    0 0 56px rgba(0, 108, 219, 0.14);
+}
+
+.neon-violet {
+  color: #fff;
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.3),
+    0 0 12px rgba(174, 135, 252, 0.34),
+    0 0 30px rgba(139, 92, 246, 0.2),
+    0 0 60px rgba(224, 17, 184, 0.12);
+}
+
+/* Bo'limlar orqasidagi yumshoq rangli yorug'lik dog'lari */
+.glow-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.glow-field::before,
+.glow-field::after {
+  content: "";
+  position: absolute;
+  inset: -35% -15%;
+  background:
+    radial-gradient(45% 40% at 18% 28%, rgba(1, 156, 248, 0.32), transparent 66%),
+    radial-gradient(40% 42% at 82% 22%, rgba(174, 135, 252, 0.28), transparent 62%),
+    radial-gradient(55% 48% at 62% 88%, rgba(0, 108, 219, 0.3), transparent 70%);
+  animation: drift 30s ease-in-out infinite alternate;
+  filter: blur(10px);
+}
+.glow-field::after {
+  animation-duration: 42s;
+  animation-direction: alternate-reverse;
+  opacity: 0.55;
+}
+
+@keyframes drift {
+  from { transform: translate3d(-3%, -2%, 0) scale(1); }
+  to   { transform: translate3d(4%, 3%, 0) scale(1.12); }
+}
+
+/* ---------------- PDF'dagi o'ng tomondagi ingichka chiziq ---------------- */
+.rail {
+  position: fixed;
+  top: 0;
+  right: clamp(12px, 3vw, 42px);
+  width: 1px;
+  height: 38vh;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(253, 253, 253, 0.75) 22%,
+    rgba(253, 253, 253, 0.75) 78%,
+    transparent
+  );
+  pointer-events: none;
+  z-index: 30;
+}
+
+/* ---------------- Kartalar ---------------- */
+
+/* PDF'dagi rasm bloklari — burchaklari o'tkir, neon hoshiya */
+.plate {
+  position: relative;
+  background: linear-gradient(160deg, rgba(10, 14, 23, 0.92), rgba(0, 0, 0, 0.92));
+  border: 1px solid var(--color-edge);
+  transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+}
+.plate:hover {
+  border-color: rgba(1, 156, 248, 0.55);
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 0 1px rgba(1, 156, 248, 0.18),
+    0 18px 60px -20px rgba(1, 156, 248, 0.5);
+}
+
+/* Yuqori qirrada yuguruvchi neon chiziq */
+.plate::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-neon-500), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.plate:hover::before { opacity: 1; }
+
+/* ---------------- Tugmalar (PDF: strelkali kapsula) ---------------- */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 0.9rem 2rem;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  white-space: nowrap;
+}
+
+.btn-neon {
+  background: var(--color-neon-500);
+  color: #000;
+  box-shadow: 0 0 24px rgba(1, 156, 248, 0.55);
+}
+.btn-neon:hover {
+  background: #fff;
+  box-shadow: 0 0 40px rgba(1, 156, 248, 0.9);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  border: 1px solid rgba(253, 253, 253, 0.85);
+  color: #fff;
+  background: transparent;
+}
+.btn-ghost:hover {
+  border-color: var(--color-neon-500);
+  color: var(--color-neon-300);
+  box-shadow: 0 0 28px rgba(1, 156, 248, 0.45);
+  transform: translateY(-2px);
+}
+
+/* Tugma ichidagi strelka — hover'da oldinga siljiydi */
+.btn-pill svg { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+.btn-pill:hover svg { transform: translateX(5px); }
+
+/* ---------------- Skroll paytidagi ochilish ----------------
+   Boshlang'ich yashirin holat faqat .js sinfi ostida qo'llanadi.
+   Sinfni <head>'dagi bloklovchi skript qo'yadi, shuning uchun
+   JS ishlamasa (yoki IntersectionObserver hech qachon ishga
+   tushmasa) kontent oddiygina ko'rinib turadi — yo'qolmaydi. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { opacity: 1; transform: none; }
+}
+
+/* ---------------- Matn kontenti (blog / xizmat sahifalari) ---------------- */
+.prose-neon {
+  color: var(--color-muted);
+  line-height: 1.8;
+}
+.prose-neon h2 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  color: #fff;
+  font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
+  line-height: 1.05;
+  margin: 2.75rem 0 1rem;
+}
+.prose-neon h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.1875rem;
+  margin: 2rem 0 0.65rem;
+}
+.prose-neon p { margin-bottom: 1.15rem; }
+.prose-neon ul { margin: 0 0 1.5rem; padding: 0; list-style: none; }
+.prose-neon ul li {
+  position: relative;
+  padding-left: 1.6rem;
+  margin-bottom: 0.6rem;
+}
+.prose-neon ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--color-neon-500);
+  box-shadow: 0 0 10px rgba(1, 156, 248, 0.9);
+}
+.prose-neon strong { color: #fff; font-weight: 600; }
+.prose-neon a {
+  color: var(--color-neon-300);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-neon a:hover { color: #fff; }
